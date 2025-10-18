@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TreeControllerSettings" load_steps=2 format=3 uid="uid://dyiop83s7o6qr"]
+
+[ext_resource type="Script" uid="uid://bmnw61m6ih4jd" path="res://Resources/TreeControllerSettings/tree_controller_settings.gd" id="1_jbxxy"]
+
+[resource]
+script = ExtResource("1_jbxxy")
+base_update_rate = 5.0
+metadata/_custom_type_script = "uid://bmnw61m6ih4jd"

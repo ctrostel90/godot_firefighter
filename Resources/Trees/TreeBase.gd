@@ -1,7 +1,5 @@
 class_name TreeBase extends Resource
 
-
-
 @export var Description := 'Basic'
 @export var Age := 0
 @export var MaturityAge := 10
@@ -19,13 +17,14 @@ func spawn_tree(parent : Node3D, controller:TreeController, world_position:Vecto
 	mesh_instance.mesh = mesh
 	world_position += spawn_offset
 	mesh_instance.position = world_position
-	
+
 	if shader_override == null:
 		var new_material := StandardMaterial3D.new()
 		new_material.albedo_color = tree_color
 		mesh_instance.mesh.surface_set_material(0,new_material)
 	else:
 		mesh_instance.mesh.surface_set_material(0,shader_override)
+	mesh_instance.add_to_group('trees')
 	
 	controller.tree_map.append(self)
 	if Engine.is_editor_hint():

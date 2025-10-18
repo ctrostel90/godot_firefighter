@@ -14,6 +14,14 @@ func spawn_trees()->void:
 				(x * noise_settings.GridScale.x),
 				0,
 				y * noise_settings.GridScale.y)
+				
+			# pull the cell info based on x,y
+			#for tree in trees:
+				#if tree.check_spawn(x,y):
+					#tree.spawn(x,y)
+			# query that appropriate maps (water,height,soil_depth,fertility) that define if a tree can spawn?
+			# if a tree is spawnable, then do the raycast to get the height
+			
 			var query := PhysicsRayQueryParameters3D.create(world_coord + Vector3.UP * 500,
 															world_coord + Vector3.DOWN * 10)
 			var result = space_state.intersect_ray(query)
@@ -22,7 +30,8 @@ func spawn_trees()->void:
 			
 			if result['position'].y > 17:
 				world_coord.y = result['position'].y
-				trees[0].spawn_tree(tree_parent,tree_controller,world_coord)
+				var index = randi_range(0,trees.size() -1)
+				trees[index].spawn_tree(tree_parent,tree_controller,world_coord)
 
 
 func _on_button_2_pressed() -> void:

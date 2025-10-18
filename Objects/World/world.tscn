@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://c47pxpxumyn54"]
+[gd_scene load_steps=13 format=3 uid="uid://c47pxpxumyn54"]
 
 [ext_resource type="Script" uid="uid://c3vgnxw2k8tcr" path="res://Scripts/TerrainGenerator.gd" id="1_a7gd4"]
 [ext_resource type="Script" uid="uid://d2kt6bos72olf" path="res://Scripts/Controllers/InteractionController.gd" id="1_qwbl1"]
 [ext_resource type="Script" uid="uid://di37l4443vods" path="res://Scripts/Controllers/TreeController.gd" id="2_4d5eb"]
 [ext_resource type="Resource" uid="uid://b67sugqhu6cdv" path="res://Resources/Terrain Generator/default_generation_settings.tres" id="2_v2x2n"]
+[ext_resource type="Resource" uid="uid://dyiop83s7o6qr" path="res://Resources/TreeControllerSettings/default_tree_controller_settings.tres" id="3_evqqg"]
 [ext_resource type="Script" uid="uid://b074h5pe65o3h" path="res://Objects/World/tree_spawner.gd" id="4_p4lbh"]
 [ext_resource type="Script" uid="uid://bavpb1m03apd" path="res://Scripts/Controllers/camera_controller.gd" id="4_vmp0i"]
 [ext_resource type="Script" uid="uid://jd8psb2gkde2" path="res://Resources/Trees/TreeBase.gd" id="6_j7740"]
 [ext_resource type="Resource" uid="uid://cxnhrrs346k2k" path="res://Resources/Trees/PineTree.tres" id="7_txyec"]
+[ext_resource type="Resource" uid="uid://cnsxl15tc45v2" path="res://Resources/Trees/Birch.tres" id="8_0hlf7"]
 
 [sub_resource type="Environment" id="Environment_qwbl1"]
 
@@ -39,6 +41,7 @@ terrainparent = NodePath("../../Scene/Terrain")
 
 [node name="TreeController" type="Node" parent="Controllers"]
 script = ExtResource("2_4d5eb")
+settings = ExtResource("3_evqqg")
 
 [node name="Terrain Generator" type="Node" parent="." node_paths=PackedStringArray("mesh_parent", "interaction_controller")]
 script = ExtResource("1_a7gd4")
@@ -51,7 +54,7 @@ script = ExtResource("4_p4lbh")
 noise_settings = ExtResource("2_v2x2n")
 tree_controller = NodePath("../Controllers/TreeController")
 tree_parent = NodePath(".")
-trees = Array[ExtResource("6_j7740")]([ExtResource("7_txyec")])
+trees = Array[ExtResource("6_j7740")]([ExtResource("7_txyec"), ExtResource("8_0hlf7")])
 
 [node name="CameraParent" type="Node3D" parent="."]
 

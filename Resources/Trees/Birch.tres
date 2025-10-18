@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TreeBase" load_steps=3 format=3 uid="uid://cnsxl15tc45v2"]
+
+[ext_resource type="Script" uid="uid://jd8psb2gkde2" path="res://Resources/Trees/TreeBase.gd" id="1_v6i6e"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_txyec"]
+radius = 0.25
+height = 2.5
+
+[resource]
+script = ExtResource("1_v6i6e")
+Description = "Birch"
+mesh = SubResource("CapsuleMesh_txyec")
+tree_color = Color(0.8323053, 0.5968617, 0.17366049, 1)
+spawn_offset = Vector3(0, 1.25, 0)
+metadata/_custom_type_script = "uid://jd8psb2gkde2"

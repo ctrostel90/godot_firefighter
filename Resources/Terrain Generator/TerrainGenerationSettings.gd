@@ -2,7 +2,6 @@ class_name TerrainGeneratorSettings
 extends Resource
 
 @export var MapSize: Vector2i
-@export var MapScale := Vector3.ONE
 @export var Seed: int
 @export var NoiseSystem : FastNoiseLite
 
