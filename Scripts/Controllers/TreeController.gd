@@ -25,7 +25,6 @@ func run_update() -> void:
 func update_trees() -> void:
 	while true:
 		semaphore.wait()
-		print('running tree update')
 		tree_map_mutex.lock()
 		for tree in tree_map:
 			pass
