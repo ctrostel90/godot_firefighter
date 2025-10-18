@@ -1,0 +1,96 @@
+[gd_scene load_steps=13 format=3 uid="uid://c47pxpxumyn54"]
+
+[ext_resource type="Script" uid="uid://c3vgnxw2k8tcr" path="res://Scripts/TerrainGenerator.gd" id="1_a7gd4"]
+[ext_resource type="Script" uid="uid://d2kt6bos72olf" path="res://Scripts/Controllers/InteractionController.gd" id="1_qwbl1"]
+[ext_resource type="Script" uid="uid://di37l4443vods" path="res://Scripts/Controllers/TreeController.gd" id="2_4d5eb"]
+[ext_resource type="Resource" uid="uid://b67sugqhu6cdv" path="res://Resources/Terrain Generator/default_generation_settings.tres" id="2_v2x2n"]
+[ext_resource type="Script" uid="uid://b074h5pe65o3h" path="res://Objects/World/tree_spawner.gd" id="4_p4lbh"]
+[ext_resource type="Script" uid="uid://bavpb1m03apd" path="res://Scripts/Controllers/camera_controller.gd" id="4_vmp0i"]
+[ext_resource type="Script" uid="uid://jd8psb2gkde2" path="res://Resources/Trees/TreeBase.gd" id="6_j7740"]
+
+[sub_resource type="Environment" id="Environment_qwbl1"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_vmp0i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j7740"]
+albedo_color = Color(0, 0.7490196, 0.16078432, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_txyec"]
+material = SubResource("StandardMaterial3D_j7740")
+
+[sub_resource type="Resource" id="Resource_0hlf7"]
+script = ExtResource("6_j7740")
+mesh = SubResource("CapsuleMesh_txyec")
+Description = "Pine"
+metadata/_custom_type_script = "uid://jd8psb2gkde2"
+
+[node name="World" type="Node3D"]
+
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="Terrain" type="Node3D" parent="Scene"]
+
+[node name="TreeParent" type="Node3D" parent="Scene/Terrain"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
+environment = SubResource("Environment_qwbl1")
+camera_attributes = SubResource("CameraAttributesPractical_vmp0i")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 588.0448, 206.7822, 488.1123)
+light_color = Color(1, 1, 0.7254902, 1)
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="Controllers" type="Node" parent="."]
+
+[node name="InteractionController" type="Node" parent="Controllers" node_paths=PackedStringArray("terrainparent")]
+script = ExtResource("1_qwbl1")
+terrainparent = NodePath("../../Scene/Terrain")
+
+[node name="TreeController" type="Node" parent="Controllers"]
+script = ExtResource("2_4d5eb")
+
+[node name="Terrain Generator" type="Node" parent="." node_paths=PackedStringArray("mesh_parent", "interaction_controller")]
+script = ExtResource("1_a7gd4")
+NoiseSettings = ExtResource("2_v2x2n")
+mesh_parent = NodePath("../Scene/Terrain")
+interaction_controller = NodePath("../Controllers/InteractionController")
+
+[node name="Tree Spawner" type="Node3D" parent="." node_paths=PackedStringArray("tree_controller", "tree_parent")]
+script = ExtResource("4_p4lbh")
+noise_settings = ExtResource("2_v2x2n")
+tree_controller = NodePath("../Controllers/TreeController")
+tree_parent = NodePath("../Scene/Terrain/TreeParent")
+trees = Array[ExtResource("6_j7740")]([SubResource("Resource_0hlf7")])
+
+[node name="CameraParent" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraParent" node_paths=PackedStringArray("sun")]
+transform = Transform3D(-0.6908824, 0.47621092, -0.5439713, 0, 0.7524149, 0.6586895, 0.7229672, 0.45507696, -0.51983017, 0, 76.35, 7.9)
+projection = 1
+current = true
+fov = 95.4
+size = 71.149
+script = ExtResource("4_vmp0i")
+movespeed = 16
+zoomspeed = 4
+height = Vector2(0, 80)
+sun = NodePath("../../Scene/DirectionalLight3D")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "Generate"
+
+[node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "Spawn"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Button" to="Terrain Generator" method="_on_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Button2" to="Tree Spawner" method="_on_button_2_pressed"]
