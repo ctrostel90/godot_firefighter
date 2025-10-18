@@ -6,7 +6,6 @@ class_name TreeSpawner extends Node3D
 @export var tree_parent:Node3D
 @export var trees:Array[TreeBase]
 
-
 func spawn_trees()->void:
 	var space_state = get_world_3d().direct_space_state
 	for x in noise_settings.MapSize.x:
@@ -21,7 +20,7 @@ func spawn_trees()->void:
 			if result.size() == 0:
 				continue
 			
-			if result['position'].y > 30:
+			if result['position'].y > 17:
 				world_coord.y = result['position'].y
 				trees[0].spawn_tree(tree_parent,tree_controller,world_coord)
 

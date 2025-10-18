@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TreeBase" load_steps=3 format=3 uid="uid://cxnhrrs346k2k"]
+
+[ext_resource type="Script" uid="uid://jd8psb2gkde2" path="res://Resources/Trees/TreeBase.gd" id="1_le87s"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_txyec"]
+
+[resource]
+script = ExtResource("1_le87s")
+Description = "Pine"
+mesh = SubResource("CapsuleMesh_txyec")
+metadata/_custom_type_script = "uid://jd8psb2gkde2"
