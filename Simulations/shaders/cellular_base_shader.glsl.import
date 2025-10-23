@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://b81xv5bsl6tp2"
+path="res://.godot/imported/cellular_base_shader.glsl-dd106bd9fde8ccbe1ec29338b8923e16.res"
+
+[deps]
+
+source_file="res://Simulations/shaders/cellular_base_shader.glsl"
+dest_files=["res://.godot/imported/cellular_base_shader.glsl-dd106bd9fde8ccbe1ec29338b8923e16.res"]
+
+[params]
+

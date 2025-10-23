@@ -1,6 +1,8 @@
 @tool
 class_name TerrainGenerator extends Node
 
+signal TerrainGenerated
+
 @export var NoiseSettings : TerrainGeneratorSettings
 @export var mesh_parent : Node3D
 
@@ -9,6 +11,8 @@ class_name TerrainGenerator extends Node
 var _debug : bool = false
 var _verticies : PackedVector3Array
 var _normals : PackedVector3Array
+var height_map : PackedByteArray
+
 @export var Generate:bool : 
 	set(value):
 		for child in mesh_parent.get_children():
@@ -22,6 +26,9 @@ func generate_mesh() -> void:
 	var arr_mesh : ArrayMesh = GenerateMesh(noise_map)
 	var _mesh : MeshInstance3D = MeshInstance3D.new()
 	_mesh.mesh = arr_mesh
+	var material = StandardMaterial3D.new()
+	material.heightmap_texture = create_texture()
+	_mesh.material_override = material
 	
 	var static_body := StaticBody3D.new()
 	var collision_shape := CollisionShape3D.new()
@@ -34,20 +41,33 @@ func generate_mesh() -> void:
 	_mesh.owner = get_tree().edited_scene_root
 	collision_shape.owner = get_tree().edited_scene_root
 	static_body.owner = get_tree().edited_scene_root
-	
+
+func create_texture() -> ImageTexture:
+	var img = Image.create_from_data(NoiseSettings.MapSize.x,NoiseSettings.MapSize.y,false,Image.FORMAT_L8,height_map)
+	TerrainGenerated.emit(img)
+	return ImageTexture.create_from_image(img)
 
 func GenerateNoiseMap() -> PackedVector3Array:
 	var map:PackedVector3Array = []
 	NoiseSettings.NoiseSystem.seed = NoiseSettings.Seed
+	
 	for x in range(NoiseSettings.MapSize.x + 1):
 		for z in range(NoiseSettings.MapSize.y + 1):
 			var samplePos := Vector2(x,z)
 			var height: float = (NoiseSettings.NoiseSystem.get_noise_2d(samplePos.x,samplePos.y) + 1) / 2.0
+			height = NoiseSettings.HeightCurve.sample(height) 
 			map.append(Vector3(
 				x * NoiseSettings.GridScale.x,
-				NoiseSettings.HeightCurve.sample(height) * NoiseSettings.HeightMultiplier,
+				height * NoiseSettings.HeightMultiplier,
 				z * NoiseSettings.GridScale.y
 			))
+	height_map.clear()
+	for x in range(NoiseSettings.MapSize.x):
+		for z in range(NoiseSettings.MapSize.y):
+			var samplePos := Vector2(x,z)
+			var height: float = (NoiseSettings.NoiseSystem.get_noise_2d(samplePos.x,samplePos.y) + 1) / 2.0
+			height = NoiseSettings.HeightCurve.sample(height) 
+			height_map.append(int(height * 255))
 	return map
 
 

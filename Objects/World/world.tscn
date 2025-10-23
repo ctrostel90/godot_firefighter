@@ -1,15 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://c47pxpxumyn54"]
+[gd_scene load_steps=16 format=3 uid="uid://c47pxpxumyn54"]
 
 [ext_resource type="Script" uid="uid://c3vgnxw2k8tcr" path="res://Scripts/TerrainGenerator.gd" id="1_a7gd4"]
+[ext_resource type="Script" uid="uid://bma8nms2tkqtl" path="res://Scripts/Globals/simulation_maps.gd" id="1_ncx3v"]
 [ext_resource type="Script" uid="uid://d2kt6bos72olf" path="res://Scripts/Controllers/InteractionController.gd" id="1_qwbl1"]
-[ext_resource type="Script" uid="uid://di37l4443vods" path="res://Scripts/Controllers/TreeController.gd" id="2_4d5eb"]
+[ext_resource type="Script" uid="uid://b8mq4rs472kx8" path="res://Simulations/test_cellular_compute.gd" id="2_evqqg"]
+[ext_resource type="Script" uid="uid://cau2h1v1n8p3p" path="res://Resources/SimulationMap/simulation_map.gd" id="2_qkhqg"]
 [ext_resource type="Resource" uid="uid://b67sugqhu6cdv" path="res://Resources/Terrain Generator/default_generation_settings.tres" id="2_v2x2n"]
-[ext_resource type="Resource" uid="uid://dyiop83s7o6qr" path="res://Resources/TreeControllerSettings/default_tree_controller_settings.tres" id="3_evqqg"]
+[ext_resource type="Resource" uid="uid://dkb6bfys54x5l" path="res://Resources/SimulationMap/moisture_map.tres" id="3_au8la"]
 [ext_resource type="Script" uid="uid://b074h5pe65o3h" path="res://Objects/World/tree_spawner.gd" id="4_p4lbh"]
 [ext_resource type="Script" uid="uid://bavpb1m03apd" path="res://Scripts/Controllers/camera_controller.gd" id="4_vmp0i"]
 [ext_resource type="Script" uid="uid://jd8psb2gkde2" path="res://Resources/Trees/TreeBase.gd" id="6_j7740"]
 [ext_resource type="Resource" uid="uid://cxnhrrs346k2k" path="res://Resources/Trees/PineTree.tres" id="7_txyec"]
 [ext_resource type="Resource" uid="uid://cnsxl15tc45v2" path="res://Resources/Trees/Birch.tres" id="8_0hlf7"]
+[ext_resource type="Script" uid="uid://bb3jkkolnb4ou" path="res://Scripts/UI/texture_rect.gd" id="11_kta6b"]
 
 [sub_resource type="Environment" id="Environment_qwbl1"]
 
@@ -35,13 +38,16 @@ sky_mode = 1
 
 [node name="Controllers" type="Node" parent="."]
 
-[node name="InteractionController" type="Node" parent="Controllers" node_paths=PackedStringArray("terrainparent")]
-script = ExtResource("1_qwbl1")
-terrainparent = NodePath("../../Scene/Terrain")
+[node name="SimulationMaps" type="Node" parent="Controllers"]
+script = ExtResource("1_ncx3v")
+SimMaps = Array[ExtResource("2_qkhqg")]([ExtResource("3_au8la")])
 
-[node name="TreeController" type="Node" parent="Controllers"]
-script = ExtResource("2_4d5eb")
-settings = ExtResource("3_evqqg")
+[node name="InteractionController" type="Node" parent="Controllers"]
+script = ExtResource("1_qwbl1")
+
+[node name="CellularComputer" type="Node" parent="Controllers" node_paths=PackedStringArray("terrain_gen")]
+script = ExtResource("2_evqqg")
+terrain_gen = NodePath("../../Terrain Generator")
 
 [node name="Terrain Generator" type="Node" parent="." node_paths=PackedStringArray("mesh_parent", "interaction_controller")]
 script = ExtResource("1_a7gd4")
@@ -52,7 +58,7 @@ interaction_controller = NodePath("../Controllers/InteractionController")
 [node name="Tree Spawner" type="Node3D" parent="." node_paths=PackedStringArray("tree_controller", "tree_parent")]
 script = ExtResource("4_p4lbh")
 noise_settings = ExtResource("2_v2x2n")
-tree_controller = NodePath("../Controllers/TreeController")
+tree_controller = NodePath("")
 tree_parent = NodePath(".")
 trees = Array[ExtResource("6_j7740")]([ExtResource("7_txyec"), ExtResource("8_0hlf7")])
 
@@ -83,6 +89,14 @@ text = "Generate"
 [node name="Button2" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 text = "Spawn"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" node_paths=PackedStringArray("cellular_computer")]
+offset_left = 34.0
+offset_top = 85.0
+offset_right = 707.0
+offset_bottom = 532.0
+script = ExtResource("11_kta6b")
+cellular_computer = NodePath("../../Controllers/CellularComputer")
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Button" to="Terrain Generator" method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Button2" to="Tree Spawner" method="_on_button_2_pressed"]

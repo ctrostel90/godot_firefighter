@@ -23,7 +23,7 @@ func run_update() -> void:
 	semaphore.post();
 	
 func update_trees() -> void:
-	while true:
+	while true:	
 		semaphore.wait()
 		tree_map_mutex.lock()
 		for tree in tree_map:
